@@ -1,3 +1,7 @@
 node_modules
 .gitattributes
 .gitignore
+server.js
+routes
+.env
+app.js

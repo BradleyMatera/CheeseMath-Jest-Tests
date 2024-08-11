@@ -1,5 +1,3 @@
-// cheeseMath.js
-
 // Importing all the cheese functions from their respective files
 const addCheese = require('./addCheese');
 const subtractCheese = require('./subtractCheese');
@@ -8,7 +6,7 @@ const divideCheese = require('./divideCheese');
 const cheeseSqrt = require('./cheeseSqrt');
 const maxCheese = require('./maxCheese');
 
-// Exporting all functions together as a single module
+// Exporting all functions together as a "single module"
 module.exports = {
   addCheese,
   subtractCheese,

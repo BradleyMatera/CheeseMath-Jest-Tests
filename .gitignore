@@ -5,5 +5,4 @@ server.js
 routes
 .env
 app.js
-package-lock.json
 coverage

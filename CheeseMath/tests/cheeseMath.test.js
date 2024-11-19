@@ -5,6 +5,8 @@ const multiplyCheese = require('../multiplyCheese');
 const divideCheese = require('../divideCheese');
 const cheeseSqrt = require('../cheeseSqrt');
 const maxCheese = require('../maxCheese');
+const regexCheese = require('../regexCheese');
+
 
 // Test for the addition function.
 describe('Cheese Addition Function', () => {
@@ -45,5 +47,25 @@ describe('Cheese Square Root Function', () => {
 describe('Cheese Maximum Function', () => {
   test('Returns the maximum of 10 and 20 blocks of cheese to equal 20 blocks', () => {
     expect(maxCheese(10, 20)).toBe(20);
+  });
+});
+
+
+// Test for the regexCheese function
+describe('Cheese Regex Function', () => {
+  test('Matches "Cheddar Cheese" with pattern "cheddar"', () => {
+    expect(regexCheese('Cheddar Cheese', 'cheddar')).toBe(true);
+  });
+
+  test('Does not match "Blue Cheese" with pattern "cheddar"', () => {
+    expect(regexCheese('Blue Cheese', 'cheddar')).toBe(false);
+  });
+
+  test('Matches "Gouda Cheese" with pattern "g.*a"', () => {
+    expect(regexCheese('Gouda Cheese', 'g.*a')).toBe(true);
+  });
+
+  test('Does not match "Swiss Cheese" with pattern "brie"', () => {
+    expect(regexCheese('Swiss Cheese', 'brie')).toBe(false);
   });
 });

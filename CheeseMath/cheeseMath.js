@@ -6,9 +6,11 @@ const divideCheese = require('./divideCheese');
 const cheeseSqrt = require('./cheeseSqrt');
 const maxCheese = require('./maxCheese');
 const regexCheese = require('./regexCheese');
+const advancedCheeseFunctions = require('./advancedCheeseFunctions');
 
 // Exporting all functions together as a "single module"
 module.exports = {
+  advancedCheeseFunctions,
   addCheese,
   subtractCheese,
   multiplyCheese,

@@ -1,11 +1,17 @@
-// Importing each function to test individually
-const addCheese = require('../addCheese');
-const subtractCheese = require('../subtractCheese');
-const multiplyCheese = require('../multiplyCheese');
-const divideCheese = require('../divideCheese');
-const cheeseSqrt = require('../cheeseSqrt');
-const maxCheese = require('../maxCheese');
+// Import math functions from the consolidated file
+const {
+  addCheese,
+  subtractCheese,
+  multiplyCheese,
+  divideCheese,
+  cheeseSqrt,
+  maxCheese,
+} = require('../mathFunctions');
+
+// Import regexCheese from its original file
 const regexCheese = require('../regexCheese');
+
+// Import advanced cheese functions
 const {
   sumOfArray,
   reverseString,
@@ -107,7 +113,7 @@ describe('Cheese Maximum Function', () => {
   });
 });
 
-// Test for the regexCheese function
+// Test for regexCheese function
 describe('Cheese Regex Function', () => {
   test('Matches a pattern in a string', () => {
     expect(regexCheese('Cheddar Cheese', 'cheddar')).toBe(true);
@@ -125,6 +131,8 @@ describe('Cheese Regex Function', () => {
     expect(regexCheese('Swiss Cheese', 'brie')).toBe(false);
   });
 });
+
+// Advanced cheese function tests remain unchanged
 
 // Test for sumOfArray function
 describe('Sum of Array Function', () => {

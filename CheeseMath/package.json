@@ -4,8 +4,8 @@
   "description": "Welcome to the **CheeseMath** project! This project is all about having fun with basic arithmetic operations using a cheese-themed twist. We’ve got you covered with adding, subtracting, multiplying, dividing, and even finding the maximum amount of cheese. 🧀",
   "main": "index.js",
   "scripts": {
-      "test": "jest --coverage",
-      "start": "nodemon server"
+    "test": "jest --coverage",
+    "start": "nodemon server"
   },
   "keywords": [],
   "author": "",

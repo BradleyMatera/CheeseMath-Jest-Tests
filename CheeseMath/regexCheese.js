@@ -1,133 +1,155 @@
 /**
- * Lesson: Understanding and Using Regular Expressions (Regex)
+ * The regexMatch function checks if a given string matches a specific regex pattern.
+ * It is designed to provide flexibility for text validation, search, and pattern matching.
+ *
+ * @param {string} inputString - The string to be tested against the regex pattern.
+ * @param {string} pattern - The regex pattern used to test the input string.
+ * @returns {boolean} - Returns true if the input string matches the pattern, otherwise false.
  * 
- * Overview:
- * Regular Expressions (regex) are powerful tools for pattern matching and text manipulation.
- * They allow us to efficiently search, validate, extract, and replace text using concise patterns.
- * This file, `regexCheese.js`, demonstrates how regex can be used in JavaScript, specifically for
- * flexible searches and validations of cheese names.
+ * Example Usage:
+ * regexMatch('Hello World', '^Hello'); // Returns true
+ * regexMatch('Goodbye World', '^Hello'); // Returns false
+ * 
+ * Why Use This Function?
+ * - Simplifies the process of dynamically testing strings against regex patterns.
+ * - Provides clear error handling for invalid patterns or inputs.
+ * - Logs detailed debugging information for easier development and troubleshooting.
  */
-
-// The regexCheese function is designed to test if a given cheese name matches a specific regex pattern.
-const regexCheese = (cheeseName, pattern) => {
+const regexMatch = (inputString, pattern) => {
   /**
    * Step 1: Input Validation
-   * Before we use regex, we need to validate the inputs to ensure predictable behavior.
-   * - cheeseName: The name of the cheese we want to test (string).
-   * - pattern: The regex pattern we want to use for testing (string).
-   * If either input is not a string, we throw an error.
+   * 
+   * Why Validate Inputs?
+   * - Ensures predictable behavior by rejecting invalid data types.
+   * - Prevents runtime errors caused by passing invalid inputs.
+   * 
+   * Validation Details:
+   * - Both `inputString` and `pattern` must be strings.
+   * - Throws an error if either parameter is not a string.
    */
-  if (typeof cheeseName !== 'string' || typeof pattern !== 'string') {
-    throw new Error('Both cheeseName and pattern must be strings.');
+  if (typeof inputString !== 'string' || typeof pattern !== 'string') {
+    throw new Error('Both inputString and pattern must be strings.');
   }
 
-  console.log(`Attempting to match cheese name "${cheeseName}" against pattern "${pattern}".`);
+  // Log the inputs for debugging purposes
+  console.log(`Testing if "${inputString}" matches the pattern "${pattern}".`);
 
   /**
    * Step 2: Creating the Regex Object
-   * We use JavaScript's RegExp class to create a regex object from the given pattern.
-   * - The 'i' flag makes the pattern case-insensitive.
-   * - This means "CHEDDAR" will match "cheddar" or "Cheddar".
    * 
-   * Example:
-   * const regex = new RegExp('cheddar', 'i');
-   * This matches strings like:
-   * - "cheddar cheese"
-   * - "CHEDDAR"
-   * - "Cheddar Crumble"
+   * Why Use RegExp Constructor?
+   * - Allows dynamic pattern creation (e.g., when the pattern is passed as a variable).
+   * - Enables additional flags for customization, like case-insensitivity.
+   * 
+   * Example of the 'i' Flag:
+   * - The 'i' flag makes the regex case-insensitive.
+   * - Example: /hello/i matches "HELLO", "hello", or "Hello".
+   * 
+   * Example Syntax:
+   * - Literal Regex: `/pattern/flags`
+   * - Constructor: `new RegExp('pattern', 'flags')`
    */
   let regex;
   try {
-    regex = new RegExp(pattern, 'i');
-    console.log(`Regex object created successfully: /${pattern}/i`);
+    regex = new RegExp(pattern, 'i'); // 'i' makes the matching case-insensitive
+    console.log(`Regex created successfully: /${pattern}/i`);
   } catch (error) {
-    console.error(`Error: Invalid regex pattern provided: "${pattern}"`);
+    /**
+     * Error Handling for Invalid Patterns:
+     * - Catches syntax errors when creating the regex object.
+     * - Provides meaningful error messages for debugging.
+     * 
+     * Example of Invalid Pattern:
+     * - Pattern: "[a-z" (missing closing bracket)
+     * - Error: "Invalid regular expression: missing ]"
+     */
+    console.error(`Invalid regex pattern: "${pattern}"`);
     throw new Error(`Invalid regex pattern: ${error.message}`);
   }
 
   /**
-   * Step 3: Testing the Pattern
-   * The `.test()` method is used to check if the regex matches the cheeseName string.
-   * - Returns true if there is a match, false otherwise.
+   * Step 3: Testing the Regex Pattern
    * 
-   * Example:
-   * regex.test('Cheddar Cheese') // Returns true if 'cheddar' is in the string.
+   * What Does .test() Do?
+   * - Checks if the regex pattern matches any part of the input string.
+   * - Returns `true` for a match, `false` otherwise.
+   * 
+   * Why Use .test()?
+   * - It’s efficient for simple yes/no checks.
+   * - Does not extract matches but verifies their existence.
    */
-  const matchResult = regex.test(cheeseName);
+  const isMatch = regex.test(inputString);
 
-  // Log the outcome of the match for clarity.
-  if (matchResult) {
-    console.log(`Success: "${cheeseName}" matches the pattern "${pattern}".`);
+  // Log the result of the match for clarity
+  if (isMatch) {
+    console.log(`Match found: "${inputString}" matches the pattern "${pattern}".`);
   } else {
-    console.log(`Failure: "${cheeseName}" does NOT match the pattern "${pattern}".`);
+    console.log(`No match: "${inputString}" does not match the pattern "${pattern}".`);
   }
 
-  // Return the boolean result of the regex test.
-  return matchResult;
+  // Return the result of the match
+  return isMatch;
 };
 
-module.exports = regexCheese;
+module.exports = regexMatch;
 
 /**
- * -------------------------------------------------
- * Technical Notes: Regex Features Highlighted Here
- * -------------------------------------------------
+ * Technical Explanation:
  * 
- * 1. **Case-Insensitive Matching with 'i' Flag:**
- *    - Ensures the pattern matches regardless of case (e.g., 'CHEDDAR' == 'cheddar').
+ * 1. **Input Validation:**
+ *    - Ensures both parameters are strings to avoid errors.
+ *    - Example of Invalid Input:
+ *      regexMatch(123, '[0-9]'); // Throws an error: Both inputs must be strings.
  * 
- * 2. **Anchors (^, $):**
- *    - Use `^` to match the start of a string.
- *    - Use `$` to match the end of a string.
- *    - Example: 
- *        - `^Cheddar` matches "Cheddar Cheese" but not "Aged Cheddar".
- *        - `Cheese$` matches "Cheddar Cheese" but not "Cheese Please!".
- * 
- * 3. **Character Classes ([a-z]):**
- *    - Define a set or range of characters to match.
+ * 2. **Regex Object Creation:**
+ *    - Dynamically creates a regex object using the `RegExp` constructor.
+ *    - Allows flexibility for patterns passed as variables.
  *    - Example:
- *        - `[a-z]` matches any lowercase letter.
- *        - `[A-Z]` matches any uppercase letter.
- *        - `[0-9]` matches any digit.
+ *      const regex = new RegExp('^Hello', 'i'); // Matches strings starting with "Hello".
  * 
- * 4. **Quantifiers ({X, Y}):**
- *    - Specify how many times a character or group should appear.
+ * 3. **Regex Flags:**
+ *    - 'i': Case-insensitive matching.
+ *      Example: /hello/i matches "HELLO", "hello", and "Hello".
+ *    - 'g': Global search. Finds all matches instead of stopping at the first.
+ *    - 'm': Multiline matching. Allows `^` and `$` to work on each line.
+ * 
+ * 4. **The .test() Method:**
+ *    - Checks if the pattern matches the input string.
+ *    - Returns a boolean: true for a match, false otherwise.
  *    - Example:
- *        - `a{2}` matches "aa".
- *        - `a{2,4}` matches "aa", "aaa", or "aaaa".
+ *      const regex = /world$/i;
+ *      regex.test('Hello World'); // true
+ *      regex.test('World Hello'); // false
  * 
- * 5. **Capturing Groups ((...)):**
- *    - Group parts of the regex for extracting matches.
- *    - Example:
- *        - `(\w+) Cheese` matches "Cheddar Cheese" and captures "Cheddar".
+ * Practical Examples:
  * 
- * --------------------------------
- * Practical Examples Using regexCheese
- * --------------------------------
+ * 1. Matching the Start of a String:
+ *    - Pattern: '^Hello'
+ *    - Input: 'Hello World'
+ *    - Result: true (Matches because the string starts with "Hello").
  * 
- * const regexCheese = require('./regexCheese');
+ * 2. Matching the End of a String:
+ *    - Pattern: 'World$'
+ *    - Input: 'Hello World'
+ *    - Result: true (Matches because the string ends with "World").
  * 
- * Example 1: Basic Matching
- * regexCheese('Cheddar Cheese', 'cheddar'); // true
- * regexCheese('Blue Cheese', 'cheddar');   // false
+ * 3. Matching Specific Characters:
+ *    - Pattern: '[a-z]'
+ *    - Input: '123abc'
+ *    - Result: true (Matches because the string contains a lowercase letter).
  * 
- * Example 2: Anchors
- * regexCheese('Cheddar Cheese', '^Cheddar'); // true
- * regexCheese('Aged Cheddar', '^Cheddar');   // false
- * regexCheese('Cheddar Cheese', 'Cheese$');  // true
+ * 4. Matching Digits:
+ *    - Pattern: '\\d'
+ *    - Input: 'abc123'
+ *    - Result: true (Matches because the string contains a digit).
  * 
- * Example 3: Character Classes
- * regexCheese('Cheddar123', '[0-9]');        // true (contains a digit)
- * regexCheese('JustCheese', '[0-9]');       // false (no digits)
+ * 5. Case-Insensitive Matching:
+ *    - Pattern: 'hello'
+ *    - Input: 'HELLO WORLD'
+ *    - Result: true (Matches because the 'i' flag ignores case).
  * 
- * Example 4: Capturing Groups
- * regexCheese('Gouda Cheese', '(Gouda)');   // true (matches "Gouda")
- * regexCheese('Swiss Cheese', '(Gouda)');   // false
- * 
- * --------------------------------
  * Summary:
- * Regular expressions are powerful tools for pattern matching and text processing.
- * With `regexCheese`, you can validate and search cheese names using flexible patterns.
- * Use this function as a starting point to explore more about regex, and leverage tools
- * like Regex101.com to test and refine your patterns.
+ * Regular expressions are powerful tools for text processing, validation, and pattern matching.
+ * By combining anchors (`^` and `$`), character classes (`[a-zA-Z0-9]`), and flags (`i`, `g`, `m`),
+ * you can handle complex text processing tasks efficiently.
  */

@@ -1,106 +1,104 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import anime from 'animejs';
 import { sumOfArray, reverseString, isPalindrome } from '../utils/advancedCheeseFunctions';
 
-// Define capitalizeWords function
-const capitalizeWords = (str) => {
-  if (!str) return ''; // Handle empty string
-  return str
-    .split(' ')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-    .join(' ');
-};
+const capitalizeWords = (str) => (str ? str.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ') : '');
 
 const AdvancedCheeseCalculator = () => {
   const [value1, setValue1] = useState('');
-  const [value2, setValue2] = useState('');
   const [result, setResult] = useState('');
-  const [example, setExample] = useState('');
+
+  useEffect(() => {
+    anime({
+      targets: '.adv-calc h1',
+      opacity: [0, 1],
+      easing: 'easeInOutQuad',
+      duration: 600,
+    });
+    anime({
+      targets: '.adv-calc .calculator-display',
+      opacity: [0, 1],
+      scale: [0.95, 1],
+      easing: 'easeOutQuad',
+      duration: 800,
+    });
+    anime({
+      targets: '.adv-calc .button-grid button',
+      translateY: [50, 0],
+      opacity: [0, 1],
+      easing: 'easeOutBounce',
+      duration: 1000,
+      delay: anime.stagger(100),
+    });
+    if (result) {
+      anime({
+        targets: '.adv-calc .calculator-display',
+        backgroundColor: ['#fff', '#e0e0e0', '#fff'],
+        easing: 'easeInOutSine',
+        duration: 300,
+      });
+    }
+  }, [result]);
 
   const handleOperation = (operation) => {
     try {
       switch (operation) {
-        case 'sumArray': {
-          if (!value1.trim()) {
-            setResult('Please enter a valid array of numbers (e.g., "1,2,3").');
-            return;
+        case 'sumArray':
+          if (!value1.trim()) setResult('ERROR');
+          else {
+            const numArray = value1.split(',').map(Number);
+            setResult(numArray.some(isNaN) ? 'ERROR' : sumOfArray(numArray));
           }
-          const numArray = value1.split(',').map(Number);
-          if (numArray.some(isNaN)) {
-            setResult('Array contains invalid numbers. Please enter numbers separated by commas.');
-          } else {
-            setResult(`Sum: ${sumOfArray(numArray)}`);
-          }
-          setExample('Example: Input "1,2,3" -> Output "Sum: 6"');
           break;
-        }
-        case 'reverse': {
-          if (!value1.trim()) {
-            setResult('Please enter a valid string to reverse.');
-          } else {
-            setResult(`Reversed String: ${reverseString(value1)}`);
-          }
-          setExample('Example: Input "hello" -> Output "Reversed String: olleh"');
+        case 'reverse':
+          setResult(value1.trim() ? reverseString(value1) : 'ERROR');
           break;
-        }
-        case 'palindrome': {
-          if (!value1.trim()) {
-            setResult('Please enter a valid string to check for palindrome.');
-          } else {
-            setResult(isPalindrome(value1) ? 'Yes, it is a palindrome.' : 'No, it is not a palindrome.');
-          }
-          setExample('Example: Input "madam" -> Output "Yes, it is a palindrome."');
+        case 'palindrome':
+          setResult(value1.trim() ? (isPalindrome(value1) ? 'TRUE' : 'FALSE') : 'ERROR');
           break;
-        }
-        case 'capitalize': {
-          if (!value1.trim()) {
-            setResult('Please enter a valid string to capitalize.');
-          } else {
-            setResult(`Capitalized Words: ${capitalizeWords(value1)}`);
-          }
-          setExample('Example: Input "hello world" -> Output "Capitalized Words: Hello World"');
+        case 'capitalize':
+          setResult(value1.trim() ? capitalizeWords(value1) : 'ERROR');
           break;
-        }
         default:
-          setResult('Invalid operation.');
+          setResult('ERROR');
       }
     } catch (error) {
-      setResult(`Error: ${error.message}`);
+      setResult(`ERR: ${error.message}`);
     }
   };
 
+  const animateButton = (e) => {
+    anime({
+      targets: e.target,
+      scale: [1, 0.9, 1],
+      backgroundColor: ['#666', '#999', '#666'],
+      easing: 'easeInOutQuad',
+      duration: 200,
+    });
+  };
+
   return (
-    <div className="advanced-calculator-container">
-      <h1>Advanced Cheese Calculator</h1>
-      <p>Perform advanced operations like array sum, string reversal, palindrome check, and word capitalization.</p>
-      <div className="input-container">
+    <div className="adv-calc component-container">
+      <h1 style={{ color: '#ccc' }}>Advanced Calc</h1>
+      <div className="calculator-display">
         <input
+          style={{ width: '100%' }}
           type="text"
           value={value1}
           onChange={(e) => setValue1(e.target.value)}
-          placeholder="Enter first value or array (e.g., '1,2,3' or 'hello')"
+          placeholder="0"
         />
-        <input
-          type="text"
-          value={value2}
-          onChange={(e) => setValue2(e.target.value)}
-          placeholder="Enter second value (optional)"
-        />
+        {result && <span style={{ display: 'block', marginTop: '10px' }}>{result}</span>}
       </div>
-      <div className="button-container">
-        <button onClick={() => handleOperation('sumArray')}>Sum Array</button>
-        <button onClick={() => handleOperation('reverse')}>Reverse String</button>
-        <button onClick={() => handleOperation('palindrome')}>Check Palindrome</button>
-        <button onClick={() => handleOperation('capitalize')}>Capitalize Words</button>
-      </div>
-      <div className="output-container">
-        <h2>Output</h2>
-        <p className="result">{result}</p>
-        {example && (
-          <>
-            <h3>Example</h3>
-            <p>{example}</p>
-          </>
-        )}
+      <div className="button-grid">
+        {['sumArray', 'reverse', 'palindrome', 'capitalize'].map((op) => (
+          <button
+            key={op}
+            onClick={(e) => { animateButton(e); handleOperation(op); }}
+          >
+            {op.toUpperCase().replace('ARRAY', '∑')}
+          </button>
+        ))}
       </div>
     </div>
   );

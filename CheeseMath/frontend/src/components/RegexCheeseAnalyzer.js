@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import anime from 'animejs';
 import regexMatch from '../utils/regexCheese';
 
 const RegexCheeseAnalyzer = () => {
@@ -6,62 +7,94 @@ const RegexCheeseAnalyzer = () => {
   const [pattern, setPattern] = useState('');
   const [result, setResult] = useState(null);
 
+  useEffect(() => {
+    anime({
+      targets: '.regex-analyzer h1',
+      opacity: [0, 1],
+      easing: 'easeInOutQuad',
+      duration: 600,
+    });
+    anime({
+      targets: '.regex-analyzer .calculator-display',
+      opacity: [0, 1],
+      scale: [0.95, 1],
+      easing: 'easeOutQuad',
+      duration: 800,
+    });
+    anime({
+      targets: '.regex-analyzer .button-grid button',
+      translateY: [50, 0],
+      opacity: [0, 1],
+      easing: 'easeOutBounce',
+      duration: 1000,
+      delay: anime.stagger(100),
+    });
+    if (result) {
+      anime({
+        targets: '.regex-analyzer .calculator-display',
+        backgroundColor: ['#fff', '#e0e0e0', '#fff'],
+        easing: 'easeInOutSine',
+        duration: 300,
+      });
+    }
+  }, [result]);
+
   const handleOperation = (operation) => {
     try {
       if (!input) {
-        setResult('Please provide a valid input string.');
+        setResult('ERROR');
         return;
       }
-
       switch (operation) {
         case 'match':
-          if (!pattern) {
-            setResult('Please provide a regex pattern to match.');
-            return;
-          }
-          const isMatch = regexMatch(input, pattern);
-          setResult(
-            isMatch
-              ? `"${input}" matches the pattern "${pattern}".`
-              : `"${input}" does not match the pattern "${pattern}".`
-          );
+          if (!pattern) setResult('ERROR');
+          else setResult(regexMatch(input, pattern) ? 'TRUE' : 'FALSE');
           break;
         case 'validate':
-          const isValid = regexMatch(input, '^[a-zA-Z\\s]+$'); // Letters and spaces only
-          setResult(
-            isValid
-              ? `"${input}" is a valid cheese name.`
-              : `"${input}" is not a valid cheese name.`
-          );
+          setResult(regexMatch(input, '^[a-zA-Z\\s]+$') ? 'VALID' : 'INVALID');
           break;
         default:
-          setResult('Invalid regex operation.');
+          setResult('ERROR');
       }
     } catch (error) {
-      setResult(`Error: ${error.message}`);
+      setResult(`ERR: ${error.message}`);
     }
   };
 
+  const animateButton = (e) => {
+    anime({
+      targets: e.target,
+      scale: [1, 0.9, 1],
+      backgroundColor: ['#666', '#999', '#666'],
+      easing: 'easeInOutQuad',
+      duration: 200,
+    });
+  };
+
   return (
-    <div className="regex-analyzer-container">
-      <h1>Regex Cheese Analyzer</h1>
-      <input
-        type="text"
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        placeholder="Enter input string"
-      />
-      <input
-        type="text"
-        value={pattern}
-        onChange={(e) => setPattern(e.target.value)}
-        placeholder="Enter regex pattern (for match)"
-      />
-      <div className="button-container">
-        <button onClick={() => handleOperation('match')}>Match Pattern</button>
-        <button onClick={() => handleOperation('validate')}>Validate Cheese Name</button>
+    <div className="regex-analyzer component-container">
+      <h1 style={{ color: '#ccc' }}>Regex Analyzer</h1>
+      <div className="calculator-display">
+        <input
+          style={{ width: '45%', marginRight: '5%' }}
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="Text"
+        />
+        <input
+          style={{ width: '45%' }}
+          type="text"
+          value={pattern}
+          onChange={(e) => setPattern(e.target.value)}
+          placeholder="Pattern"
+        />
+        {result && <span style={{ display: 'block', marginTop: '10px' }}>{result}</span>}
       </div>
-      {result && <p className="result">Result: {result}</p>}
+      <div className="button-grid">
+        <button onClick={(e) => { animateButton(e); handleOperation('match'); }}>MATCH</button>
+        <button onClick={(e) => { animateButton(e); handleOperation('validate'); }}>VALIDATE</button>
+      </div>
     </div>
   );
 };

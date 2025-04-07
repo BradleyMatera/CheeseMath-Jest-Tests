@@ -1,106 +1,66 @@
 body {
-    font-family: 'Roboto', sans-serif;
-    background-color: #e0f7fa;
     margin: 0;
-    padding: 0;
+    padding: 20px;
+    min-height: 100vh;
+    background: #e0e0e0;
+    /* Light gray background */
+    font-family: 'Orbitron', monospace;
+    /* Calculator font */
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
 }
 
 .app-container {
     text-align: center;
     padding: 20px;
-}
-
-.calculator-container {
-    margin: 0 auto;
-    padding: 20px;
-    max-width: 400px;
-    background-color: #0288d1;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 800px;
+    background: #333;
+    /* Dark gray calculator body */
     border-radius: 10px;
-    color: #ffffff;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
-.calculator-container h1 {
+.calculator-display {
+    background: #fff;
+    /* White display */
+    border: 2px solid #000;
+    padding: 15px;
     margin-bottom: 20px;
-    font-size: 24px;
-    color: #ffffff;
-}
-
-input {
-    width: calc(50% - 10px);
-    margin: 5px;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #0288d1;
+    font-size: 1.5em;
+    color: #000;
+    text-align: right;
     border-radius: 5px;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-    background-color: #ffffff;
-    color: #0288d1;
 }
 
-input:focus {
-    outline: none;
-    border-color: #ffffff;
-    box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+.component-container {
+    margin: 20px 0;
+    padding: 20px;
+    background: #444;
+    /* Slightly lighter gray for sections */
+    border-radius: 8px;
 }
 
-.button-container button {
-    margin: 5px;
-    padding: 10px 20px;
-    font-size: 16px;
+.button-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* Calculator button layout */
+    gap: 10px;
+}
+
+button {
+    padding: 15px;
+    font-size: 1.2em;
+    border: 1px solid #000;
+    border-radius: 5px;
+    background: #666;
+    /* Gray buttons */
+    color: #fff;
     cursor: pointer;
-    border: none;
-    border-radius: 5px;
-    background-color: #ffffff;
-    color: #0288d1;
-    transition: all 0.3s ease;
 }
 
-.button-container button:hover {
-    background-color: #b3e5fc;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-.result {
-    margin-top: 20px;
-    font-weight: bold;
-    font-size: 18px;
-    color: #ffffff;
-}
-
-/* Additional Enhancements */
-body {
-    font-family: 'Roboto', sans-serif;
-    background: linear-gradient(135deg, #e0f7fa, #80deea);
-}
-
-.calculator-container {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.calculator-container:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-}
-
-input {
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-input:focus {
-    border-color: #80deea;
-    box-shadow: 0 0 10px rgba(128, 222, 234, 0.5);
-}
-
-.button-container button {
-    font-weight: bold;
-}
-
-.button-container button:active {
-    transform: scale(0.95);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+button.accent {
+    background: #d32f2f;
+    /* Red for special buttons */
 }

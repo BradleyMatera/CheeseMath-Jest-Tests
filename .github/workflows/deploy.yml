@@ -1,0 +1,47 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'cheese-math-nextjs/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        working-directory: ./cheese-math-nextjs
+        run: bun install
+
+      - name: Build for GitHub Pages
+        working-directory: ./cheese-math-nextjs
+        run: bun run build:pages
+
+      - name: Commit and push docs folder
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add cheese-math-nextjs/docs
+          git diff --staged --quiet || git commit -m "🚀 Deploy to GitHub Pages [skip ci]"
+          git push
